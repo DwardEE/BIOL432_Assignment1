@@ -11,5 +11,7 @@ cyl_volume <- function(width, length) {
 
 # Add a column "volume" to the measurements data frame
 measurements <- measurements %>% mutate(volume = cyl_volume(limb_width, limb_length))
+# Exporting the data frame
+write.csv(measurements, "measurements.csv", row.names = FALSE)
 
 
