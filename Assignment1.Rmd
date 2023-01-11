@@ -1,0 +1,77 @@
+---
+title: "BIOL432 Assignment 1"
+author: "Edward Chen"
+date: "2023-01-09"
+output: html_document
+---
+https://github.com/DwardEE/BIOL432_Assignment1
+
+## Loading Relevant Packages
+
+```{r}
+# Loading necessary packages
+library('dplyr')
+library('ggplot2')
+library('tidyr')
+```
+
+## Data Generation
+
+The first script will generate the data frame containing 4 columns: species, limb length, limb width and observer. There are 100 samples, each being randomly generated. For species and observers, the values for each sample are randomly selected from a set of 5 or 3 names respectively. The limb length and limb width columns are generated depending on the species, the values are sampled from realistic normal distributions. The second script then takes this data frame and modifies it. It calculates the limb volume from each sample by using the limb width and length as the diameter and length parameters in the equation to calculate the volume of a cylinder. This rough approximation of volume is then added as the fifth column to the data frame. Finally, the data frame is then saved again to a csv file.
+
+```{r}
+source('dataGenerato.R')
+source('volumEstimato.R')
+```
+
+
+## Data Processing
+
+```{r}
+# Loading the changed measurements data frame
+measurements <- read.csv("measurements.csv")
+# Sorting the measurements first by species name, then by observer, and finally by limb volume
+sorted_measurements <- measurements %>% arrange(species_sample, observer, limb_volume)
+```
+
+## Results
+
+```{r}
+# Display the mean limb volume of the species through a table
+sorted_measurements %>% group_by(species_sample) %>% summarize(avg_limb_volume = mean(limb_volume))
+```
+
+Table 1: The table here shows the average limb volume for each species.
+
+```{r}
+# Display the number of each species and observer combination as a table
+sorted_measurements %>% group_by(species_sample, observer) %>% tally()
+```
+
+Table 2: The table here identifies the number of species observed by each observer.
+
+```{r}
+# Plotting the boxplot for the distribution of limb volume for each species
+ggplot(sorted_measurements, aes(x = species_sample, y = limb_volume)) +
+  geom_boxplot() +
+  labs(x = "Species", y = "Limb volume (cm^2)",
+       title = "Distribution of volume of species") +
+  theme(axis.title = element_text(size = 10),
+        plot.title = element_text(size = 14),
+        axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+Figure 1: The plot is a box plot with the x axis being the species while the y axis is the limb volume in centimeters squared. It can be observed that the species of giraffe that was included has the largest average limb volume. This is of course due to its relatively large size.
+
+```{r, fig.width=10,fig.height=11}
+# Pivoting the data into a long format using tidyr
+measurements_long <- sorted_measurements %>%
+  pivot_longer(c('limb_length','limb_width','limb_volume'), names_to = "measurement", values_to = "value")
+# Displaying plots of frequency histogram for each feature measured for each species
+ggplot(measurements_long, aes(x = value)) +
+  geom_histogram(alpha = 0.5, position = "dodge", bins = 15) +
+  facet_wrap(~measurement + species_sample, ncol = 3, scales = "free") +
+  labs(x = "Value", y = "Frequency")
+```
+
+Figure 2: Here are the frequency histograms for each of feature measured for each species. The x axis is the value (centimeters for length and width, centimeters squared for volume) while the y axis is the frequency. 
