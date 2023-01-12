@@ -17,7 +17,7 @@ library('tidyr')
 
 ## Data Generation
 
-The first script will generate the data frame containing 4 columns: species, limb length, limb width and observer. There are 100 samples, each being randomly generated. For species and observers, the values for each sample are randomly selected from a set of 5 or 3 names respectively. The limb length and limb width columns are generated depending on the species, the values are sampled from realistic normal distributions. The second script then takes this data frame and modifies it. It calculates the limb volume from each sample by using the limb width and length as the diameter and length parameters in the equation to calculate the volume of a cylinder. This rough approximation of volume is then added as the fifth column to the data frame. Finally, the data frame is then saved again to a csv file.
+The first script will generate the data frame containing 4 columns: species, limb length, limb width and observer. There are 100 s   amples, each being randomly generated. For species and observers, the values for each sample are randomly selected from a set of 5 or 3 names respectively. The limb length and limb width columns are generated depending on the species, the values are sampled from realistic normal distributions. The second script then takes this data frame and modifies it. It calculates the limb volume from each sample by using the limb width and length as the diameter and length parameters in the equation to calculate the volume of a cylinder. This rough approximation of volume is then added as the fifth column to the data frame. Finally, the data frame is then saved again to a csv file.
 
 ```{r}
 source('dataGenerato.R')
