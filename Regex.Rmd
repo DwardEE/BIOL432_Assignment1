@@ -1,0 +1,24 @@
+---
+title: "A4_Chen_Edward"
+author: "Edward Chen"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+# BIOL432 Assignment 4
+## https://github.com/DwardEE
+
+```{r, warning=FALSE, message=FALSE}
+# Importing dplyr library
+library("dplyr")
+
+# Read the csv with the measurements
+MData <- read.csv("measurements.csv")
+# Implementing the Sp column
+MData <- MData %>% mutate(Sp = gsub("([A-Z])([a-z]+) ([a-z]+)", "\\1. \\3", species_sample))
+# Removing the old species_sample column and moving Sp to the left of the dataframe
+MeasShort <- MData %>% select(Sp, everything()) %>% select(-species_sample)
+MeasShort
+# Exporting the data frame
+write.csv(MeasShort, "MeasShort.csv", row.names = FALSE)
+```
